@@ -26,7 +26,7 @@
 1. 首先尝试重做安装盘等常规方式，均无效
 2. 联系到之前 ASUS 飞行堡垒 安装 windows10 时遇到显卡等设备无法驱动的问题，怀疑是某些硬件无驱动/不适配导致的
 3. 了解到所用机器是`神州 kingbook T96E` 游戏本，有 NVIDA 独显，搜索到神州品牌双系统风评不佳
-4. 使用品牌名称进行搜索，发现[神州战神 WIN10 安装 Ubuntu 双系统教学](https://blog.csdn.net/u011680118/article/details/90740181)，其中提到 nouveau 显卡驱动**会在选择语言等界面卡死**，符合症状 1 ，症状 2 中也出现过 nouveau 这个关键词，故进行尝试。
+4. 使用品牌名称进行搜索，发现[神州战神 WIN10 安装 Ubuntu 双系统教学-CSDN](https://blog.csdn.net/u011680118/article/details/90740181)，其中提到 nouveau 显卡驱动**会在选择语言等界面卡死**，符合症状 1 ，症状 2 中也出现过 nouveau 这个关键词，故进行尝试。
 5. 使用此教程提供的方法成功解决：
     >在看到选择 "Try Ubuntu without installing" 与 "Install Ubuntu" 的选项时
     >1. 按向下键移到 Install Ubuntu 选项，键盘按e, 进入命令行模式，编辑文本
@@ -37,7 +37,7 @@
     >————————————————
     >版权声明：本文为CSDN博主「Anyanyamy」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
     >原文链接：https://blog.csdn.net/u011680118/article/details/90740181
-6. 在系统安装成功后，可参考[https://blog.csdn.net/tjuyanming/article/details/79267984]安装 NVIDA 提供的相应驱动
+6. 在系统安装成功后，可参考[此教程](https://blog.csdn.net/tjuyanming/article/details/79267984)安装 NVIDA 提供的相应驱动
 
 #### 原因分析
 
