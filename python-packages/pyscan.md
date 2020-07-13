@@ -79,7 +79,7 @@ ln -s /usr/python38/Python-3.8.3/bin/python /usr/bin/python3
 
 <!-- /code_chunk_output -->
 
-##问题及解决办法
+## 问题及解决办法
 ### 一.pysonar2
 mvn package时遇到 Error while storing the mojo status
 ```
