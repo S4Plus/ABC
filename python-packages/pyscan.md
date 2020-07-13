@@ -68,12 +68,19 @@ python3 featureScanner.py -s /<default_args_class.py的地址> -t <default_args_
 
 ### 三. 安装Python3.8.3
 下载Python-3.8.3.tgz，新建一个文件夹用于解压（tar -zxvf Python-3.8.3.tgz)
+
 cd Python-3.8.3
+
 ./configure（需要安装gcc）
+
 make
+
 sudo make install
+
 #添加软链接，删除原来的链接
+
 rm -rf /usr/bin/python3
+
 ln -s /usr/python38/Python-3.8.3/bin/python /usr/bin/python3
 
 
