@@ -64,3 +64,66 @@ python3 featureScanner.py -s /<default_args_class.py的地址> -t <default_args_
 (如 python3 featureScanner.py -s /home/xu/Downloads/default_args_class.py -t /home/xu/pysonar/pysonar2/html/default_args_class.py.html)
 ```
 成功生成表格
+
+### 三. 安装Python3.8.3
+下载Python-3.8.3.tgz，新建一个文件夹用于解压（tar -zxvf Python-3.8.3.tgz)
+cd Python-3.8.3
+./configure（需要安装gcc）
+make
+sudo make install
+#添加软链接，删除原来的链接
+rm -rf /usr/bin/python3
+ln -s /usr/python38/Python-3.8.3/bin/python /usr/bin/python3
+
+##安装过程中的问题及解决办法
+### 一.pysonar2
+mvn package时遇到 Error while storing the mojo status
+```
+在安装maven的时候，按照网上的教程在/etc/profile里设置路径的话mvn package的时候会出现这种问题
+		解决办法：设置路径不在/etc/profile里操作，环境变量写在~/.bash_profile里
+		export PATH="/usr/maven/apache-maven-3.6.3/bin:$PATH"
+```
+mvn package时遇到 Cannot create resource output directory: / pysonar2/target/classes
+```
+问题：target资源被占用
+解决办法：pysonar2 不要 clone 到 / 目录下，应该放到 ~ 目录下
+```
+mvn package时遇到测试错误
+```
+mvn package -Dmaven.test.failure.ignore=true跳过测试出错
+```
+
+### 二. pyscan
+使用pip时遇到报错
+```
+python3 -m pip install 包名 -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+此处若只有python3 -m pip install 包名 的话无法正常pip install
+```
+使用python3 featureScanner.py -s /xxxx -t /xxxx 的时候遇到报错：
+```
+遇到报错ModuleNotFoundError: No module named '_ctypes':
+	  sudo apt-get install libffi-dev
+		从“./configure”步骤开始重装python3.8
+```
+```
+遇到报错from _bz2 import BZ2Compressor, BZ2Decompressor
+        ModuleNotFoundError: No module named ‘_bz2’：
+              sudo apt-get install bzip2-dev
+              从“./configure”步骤开始重装python3.8
+```
+```
+遇到报错Could not import the lzma modle； Your installed Python is incomplete：
+	sudo apt-get install liblzma-dev
+	python3 -m pip install backports.lzma -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
+	vim /usr/local/lib/python3.8/lzma.py
+	文件的第27行可以看到：
+		from _lzma import *
+		from _lzma import _encode_filter_properties, _decode_filter_properties
+	这里改成
+		try:
+			from _lzma import *
+			from _lzma import _encode_filter_properties, _decode_filter_properties
+		except:
+			from backports.lzma import *
+			from backports.lzma import _encode_filter_properties, _decode_filter_properties
+```
