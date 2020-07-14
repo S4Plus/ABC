@@ -346,6 +346,8 @@ documentserver-generate-allfonts.sh
 
 清除浏览器缓存，再打开文件，就能看到文档正确加载了微软的字体。
 
+![字体、符号全部正确显示](./images/pretty_fonts.png)
+
 ## 参考教程
 
 1. [How to install NextCloud 19 on Ubuntu 18.04/19.04/19.10/20.04](https://www.marksei.com/how-to-install-nextcloud-19-on-ubuntu/)
