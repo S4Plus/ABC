@@ -4,6 +4,7 @@
 ## 操作系统
 
 * [Ubuntu](./OS/ubuntu.md)
+* [搭建NextCloud](./OS/搭建nextcloud.md)
 
 ## ROS 平台相关
 * [ROS 安装](./ROS/ROS.md)
