@@ -44,6 +44,8 @@ conda install jupyter
 
 ### Qiskit 安装[4]
 
+#### 安装
+
 ​	创建一个只有安装Python的最小环境：
 
 ```
@@ -71,6 +73,33 @@ qiskit-aqua           0.7.3
 qiskit-ibmq-provider  0.7.2
 qiskit-ignis          0.3.3
 qiskit-terra          0.14.2
+```
+
+​	如果你希望使用可视化功能，推荐安装visualization包作为额外需求：
+
+```sh
+pip install qiskit[visualization]
+```
+
+·	安装好了之后，你可以通过Python将其导入到环境中：
+
+```Python
+import qiskit
+```
+
+#### 访问IBM量子系统
+
+​	完成了之前的步骤后，你就可以通过Qiskit.Aer提供的模拟器在自己的经典计算机上执行量子电路。如果你想要在真实机器上运行，你可以按照以下步骤：
+
+1. 创建一个IBM账号；
+
+2. 打开导航栏中的用户->**My Account**；
+3. 点击**Copy token**将令牌复制到剪贴板；
+4. 在本地执行以下指令以将API令牌存储在本地的配置文件`qiskitrc`当中，替代`MY_API_TOKEN`为你在剪贴板中存取的值：
+
+```python
+from qiskit import IBMQ
+IBMQ.save_account(`MY_API_TOKEN`)
 ```
 
 ### Q&A
@@ -124,19 +153,20 @@ jupyter notebook
 [I 18:16:24.347 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
 ```
 
-其中信息依此表示为：
+此时代表jupyter已经运行在[网页](http://127.0.0.1:8888/?token=c1ce5048a8c3fd0cdeacd760e9f7c4fe8a5b27507a9941cf)上。
 
-+ 当前jupyter运行的工作本地目录
-+ Jupyter Notebook服务器运行在下面的亡值
-+ 利用`ctrl+c`以终止服务器的运行（两次`ctrl+c`可以跳过确认）
+之后关于jupyter的使用请参照[3]，而当前文件夹下包含了以下若干个程序：
 
-之后关于jupyter的使用请参照[3]，而示例程序可以从[1]中获得。
-
-我的示例程序保存在当前文件夹下的plot_H.ipynb文件中（可以使用Visual Studio Code打开）。
+| 程序         | 完成功能                                                     |
+| ------------ | ------------------------------------------------------------ |
+| plot_H.ipynb | 程序来自[1]，主要完成了Qiskit的基本使用，如量子电路的构建和模拟器上运行量子电路 |
+| Ep3.ipynb    | 程序来自[5]系列的Ep3，部分内容与上一个程序相同，主要对比了在模拟器上运行和在真实机器上运行之间的差别。在程序中实现了在IBMQ机器运行程序 |
+| Ep4.ipynb    | 程序来自[5]系列的Ep4，程序分别用Bloch球，状态向量和测量的方式表示了量子态 |
+| Ep5.ipynb    | 程序来自[5]系列的Ep5，程序利用量子线路实现了量子信息的传送   |
 
 ### 注意事项
 
-如果在jupyter使用过程中出现ImportError，请查看Jupyter当前使用的Python版本是否是包所安装的对应版本。
+1. 如果在jupyter使用过程中出现ImportError，请查看Jupyter当前使用的Python版本是否是包所安装的对应版本。
 
 ## 参考
 
@@ -147,3 +177,5 @@ jupyter notebook
 [3] [Jupyter Notebook介绍、安装及使用教程](https://zhuanlan.zhihu.com/p/33105153)
 
 [4] [Installing Qiskit](https://qiskit.org/documentation/install.html)
+
+[5] [Video series:Coding with QIskit](https://www.youtube.com/playlist?list=PLOFEBzvs-Vvp2xg9-POLJhQwtVktlYGbY)
