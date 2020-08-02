@@ -1,6 +1,48 @@
 # Qiskit 学习笔记
 
+## Qiskit特点
+
+### Terra
+
+​	Terra，四大元素之中的土元素，作为Qiskit剩余部分的基础。Terra提供了在电路和脉冲层面组成量子程序的基础，目的是优化对于特定设备的约束，并管理远程访问设备上批处理实验的执行。Terra通过定义界面，获得了理想的终端用户体验，以及优化层次，脉冲调度和后端通信高效处理。
+
+​	Qiskit.Terra由下面的六个模块组成：
+
+1. `qiskit.circuit`
+2. `qiskit.pulse`
+3. `qiskit.transpiler`
+4. `qiskit.provider`
+5. `qiskit.quantum_info`
+6. `qiskit.visualization`
+
 ## Qiskit安装
+
+### Github学习
+
+​	Git是目前世界上最先进的分布式版本控制系统，不需要服务器端软件，就可以运作版本控制，使得源代码的发布和交流极其方便。git的速度很快，这对于诸如Linux内核这样的大项目来说自然很重要。git最为出色的是它的合并追踪（merge tracing）能力。而**GitHub**是通过Git进行版本控制的软件源代码托管服务平台。
+
+​	关于git的具体教程可以参考[廖雪峰的Git教程](https://www.liaoxuefeng.com/wiki/896043488029600)。接下来以Qiskit为例，简单介绍如何从Github上clone项目：
+
+1. 首先，找到你想要clone的项目在Github中的位置。以Qiskit为例，其代码仓库在Github中的网址为[Qiskit](https://github.com/Qiskit/qiskit)；
+2. 其次，在当前网址中的右上方找到绿色的**Code**按键，点击后会出现如下的视图
+
+<img src="fig/1-1.png" style="zoom:50%">
+
+3. 这时你有两种选择将代码拷贝到本地：
+
+   <img src="fig/1-2.png" style="zoom:50%">
+
+   + 选择红框中的按钮保存链接，在终端中(Linux, Mac)或者WSL中(Windows)中利用指令
+
+     ```
+     git clone CLONE_URL
+     ```
+
+     将代码库clone到当前所在目录下
+
+   + 选择蓝框中的按钮下载ZIP包，下载完成后利用解压获得代码库
+
+4. 之后，如果Github上的代码更新，可以在工作目录下通过`git pull`指令将新的版本“拉”到本地
 
 ### 辅助工具安装
 
@@ -160,9 +202,9 @@ jupyter notebook
 | 程序         | 完成功能                                                     |
 | ------------ | ------------------------------------------------------------ |
 | plot_H.ipynb | 程序来自[1]，主要完成了Qiskit的基本使用，如量子电路的构建和模拟器上运行量子电路 |
-| Ep3.ipynb    | 程序来自[5]系列的Ep3，部分内容与上一个程序相同，主要对比了在模拟器上运行和在真实机器上运行之间的差别。在程序中实现了在IBMQ机器运行程序 |
-| Ep4.ipynb    | 程序来自[5]系列的Ep4，程序分别用Bloch球，状态向量和测量的方式表示了量子态 |
-| Ep5.ipynb    | 程序来自[5]系列的Ep5，程序利用量子线路实现了量子信息的传送   |
+| Ep3.ipynb    | 程序来自[Qiksit视频系列](https://www.youtube.com/playlist?list=PLOFEBzvs-Vvp2xg9-POLJhQwtVktlYGbY)的Ep3，部分内容与上一个程序相同，主要对比了在模拟器上运行和在真实机器上运行之间的差别。在程序中实现了在IBMQ机器运行程序 |
+| Ep4.ipynb    | 程序来自[Qiskit视频系列](https://www.youtube.com/playlist?list=PLOFEBzvs-Vvp2xg9-POLJhQwtVktlYGbY)的Ep4，程序分别用Bloch球，状态向量和测量的方式表示了量子态 |
+| Ep5.ipynb    | 程序来自[Qiskit视频系列](https://www.youtube.com/playlist?list=PLOFEBzvs-Vvp2xg9-POLJhQwtVktlYGbY)的Ep5，程序利用量子线路实现了量子信息的传送 |
 
 ### 注意事项
 
@@ -178,4 +220,3 @@ jupyter notebook
 
 [4] [Installing Qiskit](https://qiskit.org/documentation/install.html)
 
-[5] [Video series:Coding with QIskit](https://www.youtube.com/playlist?list=PLOFEBzvs-Vvp2xg9-POLJhQwtVktlYGbY)
