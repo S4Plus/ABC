@@ -16,3 +16,7 @@
 ## Git 操作
 
 * [tag 查询](./git/git-tag.md)
+
+## 会议和期刊
+
+* [会议期刊](./Conferences and Journals/README.md)
