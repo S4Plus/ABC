@@ -19,4 +19,3 @@
 
 ## 会议和期刊
 
-* [会议期刊](./Conferences and Journals/README.md)
