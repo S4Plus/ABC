@@ -110,7 +110,7 @@ mvn package -Dmaven.test.failure.ignore=true跳过测试出错
 python3 -m pip install 包名 -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
 此处若只有python3 -m pip install 包名 的话无法正常pip install
 ```
-使用python3 featureScanner.py -s /xxxx -t /xxxx 的时候遇到报错：
+使用python3 featureScanner.py 的时候遇到报错：
 ```
 遇到报错ModuleNotFoundError: No module named '_ctypes':
 	  sudo apt-get install libffi-dev
@@ -137,4 +137,8 @@ python3 -m pip install 包名 -i http://pypi.douban.com/simple/ --trusted-host p
 		except:
 			from backports.lzma import *
 			from backports.lzma import _encode_filter_properties, _decode_filter_properties
+```
+```
+遇到报错Error: Python source file or type inference result file or config file missing!
+	命令输入不全，应为python3 featureScanner.py -s /py文件路径 -t /html文件路径 -f config.ini -l standard_res
 ```
