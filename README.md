@@ -20,6 +20,7 @@
 ## 工具
 
 * [rst 转 pdf](./toolbox/rst2pdf.md)
+* [校园网代理设置](./toolbox/proxy.md)
 
 ## 会议和期刊
 
