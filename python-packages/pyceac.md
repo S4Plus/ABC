@@ -71,7 +71,7 @@
     bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
     ```
 * 链接 libclang.so
-* 修改 
+* 修改 cmakelists 的路径
 
 ### pyceac
 
