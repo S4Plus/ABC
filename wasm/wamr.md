@@ -140,12 +140,12 @@ wamrc -o test.aot test.wasm
 
 ## 配置过程中可能遇到的问题
 
-* 使用clang编译C程序报错 “fatal error: 'stdio.h' file not found”<img src="C:\Users\44758\AppData\Roaming\Typora\typora-user-images\image-20200917093012986.png" alt="image-20200917093012986" style="zoom:67%;" />
+* 使用clang编译C程序报错 “fatal error: 'stdio.h' file not found”<img src="./pics/image-20200917093012986.png" alt="image-20200917093012986" style="zoom:67%;" />
 
   错误：这个是因为路径设置错误，上图中路径为`/opt/wasi-sdk/wasi-sdk-11.0/bin/clang`，而实际上需要的路径为`/opt/wasi-sdk/bin/clang`
   解决：改为上述路径就解决问题了（不过没太明白原因）
 
 * 使用wamrc生成.aot文件，或使用iwasm运行时报错"magic header not detected"
-  ![image-20200917093915781](C:\Users\44758\AppData\Roaming\Typora\typora-user-images\image-20200917093915781.png)
+  ![image-20200917093915781](./pics/image-20200917093915781.png)
   错误：在编译.wasm文件时没有使用sdk中的clang
   解决：使用`/opt/wasi-sdk/bin/clang`进行编译生成.wasm文件
