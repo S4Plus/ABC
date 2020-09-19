@@ -5,10 +5,37 @@
 <!-- code_chunk_output -->
 
 - [Ubuntu 安装相关问题](#ubuntu-安装相关问题)
+  - [安装新版本的Python3](#安装新版本的Python3)
+    - [添加软件源](#添加软件源)
+    - [安装](#安装)
   - [双系统相关](#双系统相关)
     - [解决神州电脑 Ubuntu 双系统安装问题](#解决神州电脑-ubuntu-双系统安装问题)
 
 <!-- /code_chunk_output -->
+
+## 安装新版本的Python3
+
+### 添加软件源
+
+```bash
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+```
+
+### 安装
+
+```bash
+sudo apt -y install python3.8
+```
+
+之后使用`python3`，还是系统自己的python，用`python3.8`可以使用python 3.8。可以使用`update-alternatives`切换版本。
+
+某个版本使用`pip`或者`venv`：
+
+```bash
+python3.8 -m pip install xxxx
+python3.8 -m venv venv
+```
 
 
 ## 双系统相关
