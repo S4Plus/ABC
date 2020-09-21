@@ -49,33 +49,45 @@ rosdep update
 
 ## 添加Python3支持
 
-### 安装PIP3
+### 安装Python3.8
+
+Ubuntu 16.04 LTS带的Python版本是上古的Python 3.5，我们安装新的Python 3.8。
 
 ```bash
-sudo apt -y install python3-pip
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt -y install python3.8 python3.8-venv python3.8-dev
 ```
 
-### 更新PIP3
+### 安装`pip`
 
 ```bash
-pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3.8 get-pip.py
+```
+
+### 使用`venv`（可选）
+
+```bash
+python3.8 -m venv venv
+source venv/bin/activate
 ```
 
 ### 换源
 
 ```bash
-python3 -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+python3.8 -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ### 安装ROS的Python3支持
 
 ```bash
-python3 -m pip install rospkg netifaces defusedxml
+python3.8 -m pip install rospkg netifaces defusedxml
 ```
 
 ## Graphviz相关
 
 ```bash
 sudo apt -y install graphviz graphviz-dev
-python3 -m pip install graphviz
+python3.8 -m pip install graphviz
 ```
