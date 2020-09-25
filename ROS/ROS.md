@@ -91,3 +91,52 @@ python3.8 -m pip install rospkg netifaces defusedxml
 sudo apt -y install graphviz graphviz-dev
 python3.8 -m pip install graphviz
 ```
+
+## 编程环境配置
+
+### PyCharm
+
+#### 版本
+
+PyCharm有专业版和社区版，社区版免费，但是专业版可以通过学校的教育邮箱白嫖，有远程开发、支持常用框架等等优点。
+
+#### 安装
+
+##### 通过snap安装
+
+社区版：
+
+```bash
+sudo snap install pycharm-community --classic
+```
+
+专业版：
+
+```bash
+sudo snap install pycharm-professional --classic
+```
+
+##### 手动安装
+
+从[https://www.jetbrains.com/pycharm/download/#section=linux](https://www.jetbrains.com/pycharm/download/#section=linux)下载并解压，放到一个合适的地方（比如`/opt/`下）。
+
+之后创建并编辑`~/.local/share/applications/pycharm.desktop`，填写如下内容：
+
+```bash
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=PyCharm
+Comment=PyCharm
+Icon=/opt/pycharm-community-2020.2.2/bin/pycharm.png
+Exec=bash -i -c "/opt/pycharm-community-2020.2.2/bin/pycharm.sh" %f
+Path=/opt/pycharm-community-2020.2.2/bin
+NoDisplay=false
+Categories=Development;X-XFCE;X-Xfce-Toplevel;
+StartupNotify=false
+Terminal=false
+```
+
+版本和目录根据下载到的进行相应的变动。
+
+重点是`Exec`，里面一定要用`bash -i -c "pycharm.sh"`，不然没法加载`~/.bashrc`中ROS相关的环境。
