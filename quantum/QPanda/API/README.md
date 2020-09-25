@@ -16,3 +16,18 @@
 
 ​	这个部分分为两个部分，第一个是读取QPandaConfig.json中所保存的替换线路数据，第二个部分是程序实现量子线路替换算法。
 
+​	量子线路替换算法的执行流程如下：
+
+```flow
+st=>start: Start
+op1=>operation: QCircuitOptimizer::sub_cir_optimizer()
+op2=>operation: QCircuitOptimizer::do_optimize()
+op3=>operation: ProcessOnTraversing::run_traversel()
+e=>end
+st->op1->op2->op3
+```
+
+
+
+​	调用量子线路替换算法的API为`QCircuitOptimizer::sub_cir_optimizer()`函数
+
