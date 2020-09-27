@@ -36,11 +36,41 @@ using OptimizerSink = std::map<size_t, std::list<pOptimizerNodeInfo>>;
 class ProcessOnTraversing : protected TraverseByNodeIter
 {
 public:
+  using layer_iter_seq = TopologSequence<std::pair<size_t, NodeIter>>; 
+public:
   virtual void run_traversal(QProg src_prog, const QVec qubits = {});
+  
+protected:
+  virtual void add_gate_to_buffer(NodeIter iter, QCircuitParam &cir_param, std::shared_ptr<QNode> parent_node, OptimizerSink& gates_buffer);
+	virtual void add_non_gate_to_buffer(NodeIter iter, NodeType node_type, QVec gate_qubits, 
+     QCircuitParam &cir_param, OptimizerSink& gates_buffer, 
+     std::shared_ptr<QNode> parent_node = nullptr);
+	virtual size_t get_node_layer(QVec gate_qubits, OptimizerSink& gate_buffer);
+	virtual size_t get_min_include_layers();
+  // 初始化QGateBuffer
+	void init_gate_buf() {
+		for (const auto& item : m_qubits)
+		{
+			m_cur_gates_buffer.insert(GatesBufferType(item->getPhysicalQubitPtr()->getQubitAddr(), std::list<pOptimizerNodeInfo>()));
+		}
+	}
+  
+protected:
+  QVec m_qubits;
+  OptimizerSink m_cur_gates_buffer;
+  size_t m_min_layer;
 }
 ```
 
-​	
+**成员变量说明**
+
+| 成员名             | 数据类型      | 备注                                                         |
+| ------------------ | ------------- | ------------------------------------------------------------ |
+| m_qubits           | QVec          | 保存Qubit的向量<br>在init_gate_buf函数中利用m_qubits包含的信息初始化m_cur_gate_buffer |
+| m_cur_gates_buffer | OptimizerSink | OptimizerSink结构是一个从qubit到<br/>`std::list<pOptimizerNodeInfo>`的结构，<br/>保存的是与每个量子比特相关的结点信息。<br/>这里的节点可以是量子门。 |
+| m_min_layer        | size_t        |                                                              |
+
+
 
 ### QCircuitOptimizer
 
@@ -138,40 +168,7 @@ private:
 }
 ```
 
-​	从`QCircuitOptimizer.test.cpp`以及QPanda工作人员的介绍看来，对量子线路优化的入口函数是`sub_cir_optimizer`。
-
-```C++
-void QPanda::sub_cir_optimizer(QCircuit& src_cir, std::vector<std::pair<QCircuit, QCircuit>> optimizer_cir_vec, const OptimizerFlag mode)
-{
-  flattern(src_cir);
-  
-  QCircuitOptimizer tmp_optimizer;
-  for (auto& optimizer_cir_pair : optimizer_cir_vec)
-	{
-		tmp_optimizer.register_optimize_sub_cir(optimizer_cir_pair.first, optimizer_cir_pair.second);
-	}
-	tmp_optimizer.register_single_gate_optimizer(mode);
-	tmp_optimizer.run_optimize(src_cir/*, used_qubits*/);
-
-	flatten(tmp_optimizer.m_new_prog, true);
-	src_cir = QProgFlattening::prog_flatten_to_cir(tmp_optimizer.m_new_prog);
-}
-```
-
-​	该函数具有两个重载版本，`src_cir`的数据类型分别为`QCircuit`和`QProg`。结合`QCircuitOptimizer.test.cpp`，输入参数`src_cir`显然是需要进行优化的线路。而`optimizer_cir_vec`从函数实现看来，其保存着需要进行替换的线路对。其函数的实现也可以看出这一点：
-
-```C++
-void QCircuitOptimizer::register_optimize_sub_cir(QCircuit sub_cir, QCircuit replace_to_cir) {
-  OptimizerSubCir tmp_optimizer_sub_cir;
-  tmp_optimizer_sub_cir.target_sub_cir = sub_cir;
-  tmp_optimizer_sub_cir.replace_to_sub_cir = replase_to_cir;
-  m_optimizer_cir_vec.push_back(tmp_optimizer_sub_cir);
-}
-```
-
-​	但是在`QCircuitOptimizer.test.cpp`中，输入的`optimizer_cir_vec`却是一个未被赋值的线路对向量。所以我猜想这一部分使用来提供用户自定义的替换线路对。
-
-​	因此，`sub_cir_optimizer`完成的主要功能就是：添加用户自定义的替换线路对，并执行优化函数`run_optimize()`。而`run_optimize`将输入参数`src_prog`和`b_enable_I`保存到类的私有成员变量当中，并调用`run_traversal()`函数。
+​	
 
 ### JsonConfigParam
 
@@ -237,4 +234,6 @@ QCircuitOptimizerConfig::QCircuitOptimizerConfig()
 
 ​	其中`m_config_file`是`QCircuitOptimizerConfig`的成员变量，数据类型为`JsonConfigParam`。从这来看，`m_config_file`用来保存和读取Json文件中的配置信息。其中比较重要的函数为`get_replace_cir`(代码中写的是`get_replase_cir`)和`read_cir`。
 
-​	
+## QProgInfo
+
+## 问题清单
