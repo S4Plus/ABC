@@ -40,6 +40,19 @@ python3.8 -m venv venv
 
 ## 双系统相关
 
+### 联想Y7000P ubuntu16.04问题
+
+1. wifi不显示
+2. 触摸板不能用
+
+#### 原因
+
+内核版本过低，要升级内核，我将4.15升级到了5.12.16版本，升级内核可能会出现“possible missing firmware /lib/firmware/nvidia/gv108”等的带 nidia字样的错误，可以到https://launchpad.net/ubuntu/+source/linux-firmware 安装最新版的 linux-firmware 包 
+
+重启可能会遇到横屏的问题，解决方法就用下面神州解决过程第五步
+
+然后进入ubuntu之后就禁用nouveau 显卡，可参考：https://blog.csdn.net/u012442845/article/details/78855573/
+
 ### 解决神州电脑 Ubuntu 双系统安装问题
 
 #### 症状
