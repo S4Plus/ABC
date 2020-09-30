@@ -4,13 +4,12 @@
 
 ## 代码阅读
 
-### Core
+这一部分根据`include/`头文件目录树进行分类，放在不同的markdown文件当中：
 
-​	这一部分记录在[Core.md](./Core.md)中
-
-### Uitilities
-
-​	这一部分记录在[Utilities.md](./Utilities.md)中
+| 文件夹名                                 | 备注 |
+| ---------------------------------------- | ---- |
+| [include/Core/QuantumCircuit](./Core.md) |      |
+| [include/Core/Utilities](./Utilities.md) |      |
 
 ## 量子线路替换
 
@@ -89,5 +88,17 @@ void ProcessOnTraversing::run_traversal(QProg src_prog, const QVec qubits /*= {}
 
 ​	如果传入的`qubits`参数为空集，那么就直接从`QProg`类型的`src_prog`类型中获取量子比特个数，将其保存在成员变量`m_qubits`中。如果不是空集，则将其数据传给`m_qubits`。
 
-​	`init_gate_buf()`是在类`ProcessOnTraversing`中定义的函数。该函数利用`ProcessOnTraversing`中的数据对`m_cur_gate_buffer`进行初始化。
+​	`init_gate_buf()`是在类`ProcessOnTraversing`中定义的函数。该函数利用`ProcessOnTraversing`类中的数据对`m_cur_gate_buffer`进行初始化。
+
+```C++
+void TraverseByNodeIter::traverse_qprog(QProg qprog) {
+  NodeIter itr = NodeIter();
+  auto param = std::make_shared<QCircuitParam>();
+  execute(prog.getImplementationPtr(), nullptr, *param, itr);
+}
+```
+
+​	观察`traverse_qprog()`函数，可以得知这个函数的功能集中在`execute()`函数的执行上。关于`execute()`函数，从其声明看来，类似于语法分析中访问者模式的`visit()`函数。需要注意的是，这里调用的是`TraverseByNodeIter::execute()`函数，而不是`ProcessOnTraversing::execute()`函数。关于每个函数的具体分析，见相关的代码阅读部分。
+
+​	
 
