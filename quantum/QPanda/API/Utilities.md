@@ -505,7 +505,11 @@ func_class.execute(node, parent_node, std::forward<Args>(func_args)...);
 
 ​	不过我感觉他没有理解我的意思。
 
+​	老师的意见也是不需要修改。
+
 3. 在`ProcessOnTraversing::run_traversal()`调用的`process()`函数对应的是哪一个`process()`函数。`ProcessOnTraversing`类定义的`process()`函数是纯虚函数。
 
 ​    这是一个纯虚函数，`process()`函数的真正实现在优化实现类中，即`QCircuitOptimizer`类中。`ProcessOnTraversing`是一个抽象的处理框架，只负责遍历，遍历到一定程度，就会调用派生类的`process()`处理函数。
 
+4. `ProcessOnTraversing::add_gate_to_buffer()`函数中`target_qubits_int`和`gate_qubits`有什么区别？
+5. 
