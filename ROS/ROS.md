@@ -1,26 +1,27 @@
 # ROS Kinetic on Ubuntu 16.04
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=3 orderedList=false} -->
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=4 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-- [ROS Kinetic on Ubuntu 16.04](#ros-kinetic-on-ubuntu-1604)
-  - [安装](#安装)
-    - [软件源](#软件源)
-    - [软件源的密钥](#软件源的密钥)
-    - [安装ROS](#安装ros)
-    - [环境设置](#环境设置)
-    - [依赖安装](#依赖安装)
-    - [初始化`rosdep`](#初始化rosdep)
-  - [添加Python3支持](#添加python3支持)
-    - [安装Python3.8](#安装python38)
-    - [安装`pip`](#安装pip)
-    - [使用`venv`（可选）](#使用venv可选)
-    - [换源](#换源)
-    - [安装ROS的Python3支持](#安装ros的python3支持)
-  - [Graphviz相关](#graphviz相关)
-  - [编程环境配置](#编程环境配置)
-    - [PyCharm](#pycharm)
+- [安装](#安装)
+  - [软件源](#软件源)
+  - [软件源的密钥](#软件源的密钥)
+  - [安装ROS](#安装ros)
+  - [环境设置](#环境设置)
+  - [依赖安装](#依赖安装)
+  - [初始化`rosdep`](#初始化rosdep)
+- [添加Python3支持](#添加python3支持)
+  - [安装Python3.8](#安装python38)
+  - [安装`pip`](#安装pip)
+  - [使用`venv`（可选）](#使用venv可选)
+  - [换源](#换源)
+  - [安装ROS的Python3支持](#安装ros的python3支持)
+- [Graphviz相关](#graphviz相关)
+- [编程环境配置](#编程环境配置)
+  - [PyCharm](#pycharm)
+    - [版本](#版本)
+    - [安装](#安装-1)
 
 <!-- /code_chunk_output -->
 
