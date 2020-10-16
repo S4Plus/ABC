@@ -11,6 +11,8 @@
 
 **量子程序转化QASM**
 
+​	QPanda2提供了QASM转换工具接口`std::string convert_qprog_to_qasm(QProg &, QuantumMachine *)`。该接口使用起来非常简单，具体可参考文档的实例。
+
 ## 代码样例
 
 ### QCircuitOptimizer.test.cpp
