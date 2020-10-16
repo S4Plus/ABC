@@ -28,6 +28,7 @@
 * [rst 转 pdf](./toolbox/rst2pdf.md)
 * [校园网代理设置](./toolbox/proxy.md)
 * [GDB使用](https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/gdb.html)
+* [可视化工具](./toolbox/visualization.md)
 
 ## 会议和期刊
 
