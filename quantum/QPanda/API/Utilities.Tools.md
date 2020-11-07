@@ -1,8 +1,6 @@
-# Utilities
+# Utilities.Tools
 
-## Tools
-
-### ProcessOnTraversing
+## ProcessOnTraversing
 
 **OptimizerNodeInfo**
 
@@ -111,9 +109,7 @@ void ProcessOnTraversing::execute(std::shared_ptr<AbstractQGateNode> cur_node, s
 
 ​    其余的`execute()`函数均调用父类`TraverseByNodeIter`对应的`execute()`函数进行处理，而这些函数都是空定义。所以这一系列函数中，唯一有用的函数。
 
-
-
-### QCircuitOptimizer
+## QCircuitOptimizer
 
 **AbstractCirOptimizer**
 
@@ -211,7 +207,9 @@ private:
 
 ​	
 
-### JsonConfigParam
+## JsonConfigParam
+
+​		在该文件中同时定义了配置文件的路径宏`#define CONFIG_PATH "QPandaConfig.json"`，即根目录下的`QPandaConfig.json`配置文件。
 
 **JsonConfigParam**
 
@@ -263,7 +261,13 @@ private:
 }
 ```
 
-​	从该类的名字看来，该类保存的是Json文件中定义的关于QCircuitOptmizer，即量子线路优化有关的配置。在构造函数中：
+## 功能
+
+### Json文件读取
+
+​	QPanda的线路替换算法需要从外部读取等价线路线路信息，而这部分信息保存在根目录下的Json配置文件中
+
+​	这一部分的功能由`QCircuitOptimizerConfig`类实现。这个类保存Json文件中定义的量子线路优化有关的配置。在构造函数中：
 
 ```C++
 QCircuitOptimizerConfig::QCircuitOptimizerConfig()
@@ -273,223 +277,197 @@ QCircuitOptimizerConfig::QCircuitOptimizerConfig()
 }
 ```
 
-​	其中`m_config_file`是`QCircuitOptimizerConfig`的成员变量，数据类型为`JsonConfigParam`。从这来看，`m_config_file`用来保存和读取Json文件中的配置信息。其中比较重要的函数为`get_replace_cir`(代码中写的是`get_replase_cir`)和`read_cir`。
+​	其中`m_config_file`是`QCircuitOptimizerConfig`的成员变量，数据类型为`JsonConfigParam`。从这来看，`m_config_file`用来保存和读取Json文件中的配置信息。其中比较重要的函数为`get_replace_cir`(代码中写的是`get_replase_cir`)和`read_cir`。这两个函数会在执行线路替换算法的期间被调用，此时Json文件读取的信息会被用于实现算法。
 
-## QProgInfo
+### 线路替换
 
-### NodeInfo
+​		这个功能的接口`QPanda::sub_cir_optimizer`位于`QCircuitOptimizer.cpp`最后作为通用接口。首先给出一个大概的流程：
 
-**NodeInfo**
+<img src="../fig/transform-1.png" style="zoom:50%">
 
-```c++
-class NodeInfo {
-  NodeInfo():
-  	m_gate_type(GATE_UNDEFINED), m_node_type(NODE_UNDEFINED), m_is_dagger(false) {}
-  
-  void clear() {
-    m_itr = NodeIter();
-    m_node_type = NODE_UNDEFINED;
-    m_gate_type = GATE_UNDEFINED;
-    m_is_dagger = false;
-    m_qubits.clear();
-    m_control_qubits.clear();
-  }
-  
-  NodeIter m_itr;
-  NodeType m_node_type;
-  GateType m_gate_type;
-  bool m_is_dagger;
-  QVec m_qubits;
-  QVec m_control_qubits;
-}
-```
-
-​	`NodeInfo`节点中保存着`QProg`节点的详细信息。
-
-**成员变量**
-
-| 变量名           | 数据类型 | 说明                                       |
-| ---------------- | -------- | ------------------------------------------ |
-| m_itr            | NodeIter | 结点的迭代器                               |
-| m_node_type      | NodeType | 当前结点的类型                             |
-| m_gate_type      | GateType | 如果当前结点的类型为门结点，保存当前门类型 |
-| m_is_dagger      | bool     | 是否为dagger                               |
-| m_qubits         | QVec     | 当前结点的量子比特                         |
-| m_control_qubits | QVec     | 当前结点的控制量子比特                     |
-
-**成员函数（不包含构造函数和析构函数）**
-
-| 函数名  | 函数参数 | 函数返回值 | 函数说明         |
-| ------- | -------- | ---------- | ---------------- |
-| clear() |          | void       | 清除节点中的信息 |
-
-**QuantumParam**
-
-```c++
-class QuantumParam
-{
-public:
-  QCircuitParam() {
-    m_is_dagger = false;
-  }
-  
-  virtual ~QCircuitParam() {}
-  
-  QCircuitParam(const QCircuit& rhs){
-    m_is_dagger = rhs.m_is_dagger;
-    m_control_qubits = rhs.m_control_qubits;
-  }
-  
-  virtual std::shared<QCircuitParam> clone() {
-    return std::make_shared<QCircuitParam>(*this);
-  }
-  
-  void append_control_qubits(const QVec &ctrl_qubits) {
-    m_control_qubits.insert(m_control_qubits.end(), ctrl_qubits.begin(), ctrl_qubits.end());
-  }
-  
-  static QVec get_real_append_qubits(QVec append_qubits, QVec target_qubits) {
-		if (0 == target_qubits.size())
-		{
-			return append_qubits;
-		}
-		if (0 == append_qubits.size())
-		{
-			return QVec();
-		}
-		auto sort_fun = [](Qubit*a, Qubit* b) {return a->getPhysicalQubitPtr()->getQubitAddr() < b->getPhysicalQubitPtr()->getQubitAddr(); };
-		std::sort(append_qubits.begin(), append_qubits.end(), sort_fun);
-		std::sort(target_qubits.begin(), target_qubits.end(), sort_fun);
-		QVec result_vec;
-		set_difference(append_qubits.begin(), append_qubits.end(), target_qubits.begin(), target_qubits.end(), std::back_inserter(result_vec));
-		return result_vec;
-	}
-  
-	bool m_is_dagger;  /**< dagger information */
-	std::vector<QPanda::Qubit*> m_control_qubits;/**< control Quantum bits */
-};
-```
-
-​	线路参数信息。
-
-**成员函数说明**
-
-| 函数名                 | 函数参数                                  | 函数返回值                 | 函数说明                   |
-| ---------------------- | ----------------------------------------- | -------------------------- | -------------------------- |
-| clone                  |                                           | std::shared<QCircuitParam> | 克隆函数                   |
-| append_control_qubits  | const QVec &ctrl_qubits                   | void                       | 添加控制量子比特           |
-| get_real_append_qubits | QVec append_qubits,<br>QVec target_qubits | QVec                       | 获得真正增加的控制量子比特 |
-
-​	其中`get_real_append_qubits()`函数的输入参数`append_qubits`为增加的控制量子比特，可能存在某些重复的。而`target_qubits`为已经受控的量子比特。返回值为真正增加的控制量子比特。
-
-**TraverByNodeIter**
-
-```c++
-class TraverseByNodeIter : public TraversalInterface<QCrcuitParam&, NodeIter&>
-{
-public:
-  TraverseByNodeIter() {}
-  ~TraverseByNodeIter() {}
-  
-public:
-  virtual void execute(std::shared_ptr<AbstractQGateNode> cur_node, std::shared_ptr<QNode> parent_node, QCircuitParam &cir_param, NodeIter& cur_node_iter) {
-    // handle QGate node
-  }; 
-  
-  virtual void execute(std::shared_ptr<AbstractQuantumMeasure> cur_node, std::shared_ptr<QNode> parent_node, QCircuitParam &cir_param, NodeIter& cur_node_iter) {
-		//handle measure node
-	}
-  
-  	virtual void execute(std::shared_ptr<AbstractQuantumReset> cur_node, std::shared_ptr<QNode> parent_node, QCircuitParam &cir_param, NodeIter& cur_node_iter) {
-		//handle reset node
-	}
-
-	virtual void execute(std::shared_ptr<AbstractClassicalProg> cur_node, std::shared_ptr<QNode> parent_node, QCircuitParam &cir_param, NodeIter& cur_node_iter) {
-		// handle classical prog
-	}
-
-	virtual void execute(std::shared_ptr<AbstractControlFlowNode> cur_node, std::shared_ptr<QNode> parent_node, QCircuitParam &cir_param, NodeIter& cur_node_iter) {
-		// handle flow control node
-		Traversal::traversal(cur_node, *this, cir_param, cur_node_iter);
-	}
-
-	virtual void execute(std::shared_ptr<AbstractQuantumCircuit> cur_node, std::shared_ptr<QNode> parent_node, QCircuitParam &cir_param, NodeIter& cur_node_iter);
-	virtual void execute(std::shared_ptr<AbstractQuantumProgram> cur_node, std::shared_ptr<QNode> parent_node, QCircuitParam &cir_param, NodeIter& cur_node_iter);
-  virtual void traverse_qprog(QProg prog);
-}
-```
-
-**成员函数说明**
-
-​	其中，只有对应`shared_ptr<AbstractQuantumCircuit>`和`shared_ptr<AbstractQuantumProgram>`的`execute()`函数有非空定义。与`shared_ptr<AbstractControlFlowNode>`相关的`execute()`函数定义比较简单，调用了`Traversal::traversal`函数。
-
-​	首先在`traverse_qprog()`函数调用了`execute()`函数，其中传入的输入参数`cir_param`尚处于最初状态。这里的`execute()`函数的输入参数类型是`std::shared_ptr<AbstractQuantumCircuit>`对应的重载类型：
+​		从`QCircuitOptimizer.test.cpp`以及QPanda工作人员的介绍看来，对量子线路优化的入口函数是`QPanda::sub_cir_optimizer`。注意这里不要与`QCircuitOptimizer::sub_cir_optimizer`弄混。
 
 ```C++
-void TraverseByNodeIter::execute(std::shared_ptr<AbstractQuantumProgram>  cur_node, std::shared_ptr<QNode> parent_node, QCircuitParam &cir_param, NodeIter& cur_node_iter)
+void QPanda::sub_cir_optimizer(QCircuit& src_cir, std::vector<std::pair<QCircuit, QCircuit>> optimizer_cir_vec, const OptimizerFlag mode)
 {
-	if (nullptr == cur_node)
+  flattern(src_cir);
+  
+  QCircuitOptimizer tmp_optimizer;
+  for (auto& optimizer_cir_pair : optimizer_cir_vec)
 	{
-		QCERR("param error");
-		throw std::invalid_argument("param error");
+		tmp_optimizer.register_optimize_sub_cir(optimizer_cir_pair.first, optimizer_cir_pair.second);
 	}
-	auto aiter = cur_node->getFirstNodeIter();
-	if (aiter == cur_node->getEndNodeIter())
-		return;
-	auto pNode = std::dynamic_pointer_cast<QNode>(cur_node);
-	if (nullptr == pNode)
-	{
-		QCERR("pNode is nullptr");
-		throw std::invalid_argument("pNode is nullptr");
-	}
-	while (aiter != cur_node->getEndNodeIter())
-	{
-		auto next = aiter.getNextIter();
-		Traversal::traversalByType(*aiter, pNode, *this, cir_param, aiter);
-		aiter = next;
-	}
+	tmp_optimizer.register_single_gate_optimizer(mode);
+	tmp_optimizer.run_optimize(src_cir/*, used_qubits*/);
+
+	flatten(tmp_optimizer.m_new_prog, true);
+	src_cir = QProgFlattening::prog_flatten_to_cir(tmp_optimizer.m_new_prog);
 }
 ```
 
-​	从函数定义可以看出，前3\~16行都是关于边界状况的检查。该函数的主要部分在于17\~22行中对`aiter`，即输入参数的`cur_node`量子程序结点迭代器中的每个结点进行访问。
-
-​	`Traversal::traversalByType()`函数的整体是一个if...else结构，在本例中，根据`aiter`的结点类型确定程序执行内容：
-
-```c++
-    template<typename T,typename... Args>
-    static void traversalByType(std::shared_ptr<QNode>  node, std::shared_ptr<QNode> parent_node, T & func_class, Args&& ... func_args)
-    {
-      int iNodeType = node->getNodeType();
-      ...
-    }
-```
-
-​	例如对于`iNodeType`结点为`GATE_NODE`的情况，程序在判断边界条件后，执行`funclass.execute()`函数：
-
-```c++
-if (GATE_NODE == iNodeType)
-{
-    auto gate_node = std::dynamic_pointer_cast<AbstractQGateNode>(node);
-    if (!gate_node)
-    {
-        QCERR("Unknown internal error");
-        throw std::runtime_error("Unknown internal error");
-    }
-   func_class.execute(gate_node, parent_node, std::forward<Args>(func_args)...);
-}
-```
-
-​	也就是该函数的功能就是通过`iNodeType`判断应该调用哪种类型的`execute()`函数，不过我认为这个函数更加合理的方式是通过以下语句实现：
+​	该函数具有两个重载版本，`src_cir`的数据类型分别为`QCircuit&`和`QProg&`。结合`QCircuitOptimizer.test.cpp`，输入参数`src_cir`显然是需要进行优化的线路。而`optimizer_cir_vec`从函数实现看来，其保存着需要进行替换的线路对。其函数的实现也可以看出这一点：
 
 ```C++
-if (!node) {
-  QCERR("Unknown internal error");
-  throw std::runtime_error("Unknown internal error");
+void QCircuitOptimizer::register_optimize_sub_cir(QCircuit sub_cir, QCircuit replace_to_cir) {
+  OptimizerSubCir tmp_optimizer_sub_cir;
+  tmp_optimizer_sub_cir.target_sub_cir = sub_cir;
+  tmp_optimizer_sub_cir.replace_to_sub_cir = replase_to_cir;
+  m_optimizer_cir_vec.push_back(tmp_optimizer_sub_cir);
 }
-func_class.execute(node, parent_node, std::forward<Args>(func_args)...);
 ```
 
-​	但是问题在于部分结点类型不是`QNode`的派生类，所以没有办法通过这种办法实现简单的调用。因此，该函数实现的重点还是在于`fun_class`的`execute()`函数定义。	
+​	在`QCircuitOptimizer.test.cpp`中，输入的`optimizer_cir_vec`是一个未被赋值的线路对向量
+
+```c++
+std::vector<std::pair<QCircuit, QCircuit>> optimizer_cir;
+sub_cir_optimizer(prog, optimizer_cir, QCircuitOptimizer::Merge_U3);
+```
+
+​	而在`QCircuitOptimizer.h`中的`cir_optimizer_config`函数中：
+
+```C++
+void cir_optimizer_by_config(T &src_cir, const OptimizerFlag mode = QCircuitOPtimizer::Merge_H_X) {
+	std::vector<std::pair<QCircuit, QCircuit>> optimitzer_cir;
+	QCircuitOptimizerConfig::get_instance().get_replace_cir(optimitzer_cir);
+	sub_cir_optimizer(src_cir, optimitzer_cir, mode);
+}
+```
+
+​	推测其中`optimizer_cir_vec`从`QCircuitOptimizerConfig`类中获得了其中的替换线路数据。这一部分信息放到变量`optimizer_cir`中传入`sub_cir_optimizer()`函数中。结合以上两段对`sub_cir_optimizer()`函数的调用，推测`optimizer_cir_vec`传入的是替换线路的数据，而`mode`变量传入的是线路优化的策略。
+
+​	`sub_cir_optimizer`完成的主要功能就是：添加用户自定义的替换线路对，并执行优化函数`run_optimize()`。而`run_optimize`将输入参数`src_prog`和`b_enable_I`保存到类的私有成员变量当中，并调用`run_traversal()`函数。
+
+```C++
+void ProcessOnTraversing::run_traversal(QProg src_prog, const QVec qubits /*= {}*/)
+{
+	if (qubits.size() == 0)
+	{
+		get_all_used_qubits(src_prog, m_qubits);
+	}
+	else
+	{
+		m_qubits = qubits;
+	}
+	init_gate_buf();
+	traverse_qprog(src_prog);
+	PTrace("finished traverse_qprog.");
+	//At the end of the traversal, call process again and clear all the gate-buf
+	process(true);
+}
+```
+
+​	如果传入的`qubits`参数为空集，那么就直接从`QProg`类型的`src_prog`类型中获取量子比特个数，将其保存在成员变量`m_qubits`中。如果不是空集，则将其数据传给`m_qubits`。
+
+​	以下分三个部分讨论使用的三个函数：
+
+**init_gate_buf()**
+
+​	`init_gate_buf()`是在类`ProcessOnTraversing`中定义的函数。该函数利用`ProcessOnTraversing`类中的数据对`m_cur_gate_buffer`进行初始化。
+
+**tracerse_qprog()**
+
+```C++
+void TraverseByNodeIter::traverse_qprog(QProg qprog) {
+  NodeIter itr = NodeIter();
+  auto param = std::make_shared<QCircuitParam>();
+  execute(prog.getImplementationPtr(), nullptr, *param, itr);
+}
+```
+
+​	观察`traverse_qprog()`函数，可以得知这个函数的功能集中在`execute()`函数的执行上。关于`execute()`函数，从其声明看来，类似于语法分析中访问者模式的`visit()`函数。需要注意的是，这里调用的是`TraverseByNodeIter::execute()`函数，而不是`ProcessOnTraversing::execute()`函数。关于每个函数的具体分析，见相关的代码阅读部分。
+
+​	总之，只有`execute(std::shared_ptr<AbstractQGateNode> cur_node,...)`在本算法中是重要的，而`execute(std::shared_ptr<AbstractQuantumCircuit>,...)`是必要的存在，除此之外函数定义都为空。
+
+​	下面来看对于`AbstractQGateNode`的`execute()`函数：
+
+```c++
+void ProcessOnTraversing::execute(std::shared_ptr<AbstractQGateNode> cur_node, std::shared_ptr<QNode> parent_node, QCircuitParam &cir_param, NodeIter& cur_node_iter)
+{
+	// push_back cur_node_iter to related qubits
+	add_gate_to_buffer(cur_node_iter, cir_param, parent_node, m_cur_gates_buffer);
+
+	//optimizer
+	size_t min_include_layers = get_min_include_layers();
+	if (min_include_layers > MAX_INCLUDE_LAYERS)
+	{
+		process(false);
+	}
+}
+```
+
+​	`add_gate_to_buffer()`函数正如其名，将当前结点添加到`m_cur_gates_buffer`中。其具体实现却没有这么简单：
+
+```c++
+void ProcessOnTraversing::add_gate_to_buffer(NodeIter iter, QCircuitParam & cir_param, std::shared_ptr<QNode> parent_node, OptimizerSink & gates_buffer)
+{
+  auto gate_node = std::dynamic_pointer_cast<AbstractQGateNode>(*iter);
+  QVec gate_qubits;
+	gate_node->getQuBitVector(gate_qubits);
+
+	QVec target_qubits_int;
+	QVec control_qubits_int;
+
+	for (auto i : gate_qubits)
+	{
+		target_qubits_int.push_back(i);
+	}
+
+	QVec control_qubits;
+	gate_node->getControlVector(control_qubits);
+
+	for (auto i : control_qubits)
+	{
+		control_qubits_int.push_back(i);
+	}
+
+	for (auto i : cir_param.m_control_qubits)
+	{
+		control_qubits_int.push_back(i);
+	}
+
+	QVec total_qubits;
+	total_qubits.insert(total_qubits.end(), target_qubits_int.begin(), target_qubits_int.end());
+	total_qubits.insert(total_qubits.end(), control_qubits_int.begin(), control_qubits_int.end());
+	
+  size_t layer = get_node_layer(total_qubits, gates_buffer);
+
+	//PTrace("On layer: %lld\n", layer);
+
+	pOptimizerNodeInfo tmp_node = std::make_shared<OptimizerNodeInfo>(iter, layer,
+	target_qubits_int, control_qubits_int, (GateType)(gate_node->getQGate()->getGateType()), parent_node, cir_param.m_is_dagger);
+	for (const auto& i : total_qubits)
+	{
+		gates_buffer.at(i->get_phy_addr()).push_back(tmp_node);
+	}
+}
+```
+
+​	`gate_node`变量保存需要插入的门结点。`gate_qubits`和`target_qubits_int`保存了当前门结点的目标比特，`control_qubits`和`control_qubits_int`则是保存了当前门结点的控制比特信息。
+
+​	之后，在第28行到第30行将目标量子比特和控制量子比特插入到局部变量`total_qubits`当中。
+
+​	之后利用得到的信息生成`pOptimizerNodeInfo`数据结构，将其插入到`gates_buffer`形参中，即`m_cur_gates_buffer`中。
+
+​	回到`execute()`函数当中，在函数体的后半部分还有一个条件判断。这个条件判断的意义在于根据当前的层数决定是否对当前线路进行处理。而处理的核心函数就是`process()`函数。
+**process()**
+
+​	下面重点介绍算法的核心函数`process()`。由于`TraverseByNodeIter`类并没有定义纯虚函数`process()`，实际中对它的调用是对它的子类`QCircuitOptimizer`所定义的`process()`函数的调用。该函数定义如下：
+
+```C++
+void QCircuitOPtimizer::process(bool on_travel_end /*= false*/)
+{
+	PTrace("On process...\n");
+	do_optimizer();
+
+	//pop some layers to new circuit
+	clean_gate_buf_to_cir(m_new_prog, on_travel_end);
+	PTrace("process end.\n");
+}
+```
+
+​	该函数功能由`do_optimizer()`和`clean_gate_buf_to_cir()`两个函数实现。总体而言，`process()`函数完成的功能是将`m_cur_gates_buffer`中的线路进行优化，然后利用新的线路生成新的量子程序`m_new_prog`。
+
+
 
 ## 问题清单
 

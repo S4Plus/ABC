@@ -16,7 +16,7 @@
    + **概述** 一个脉冲调度是一个被送到量子实验中作用于某个通道（实验输入线）的脉冲的集合。在软件栈中，相对于量子线路是更低的一个层次，并且在这一层次中，需要将线路上的量子门被表示为一系列脉冲的形式。在这一层次可以通过设计实验减少错误（dynamic decoupling, error mitigation and optimal pulse shapes).
 3. [`qiskit.transpiler`](https://qiskit.org/documentation/apidoc/transpiler.html)
    + **概述** 在量子线路上研究的很大一部分都在如何让量子线路在量子设备上运行。在这些设备上，计算时的实验错误和退相干都会引入错误。这样，为了得到一个鲁棒的实现，有必要减少线路中门的数量和整体运行时间。转译器(The transpiler)引入了阶段管理器(pass manager)的概念，这可以让使用户对于他们的算法寻找优化并且发现一个更好的量子电路。将它称为转译器是因为最终结果仍然是电路的形式。
-4. `qiskit.provider`
+4. qiskit.provider`
    + **概述** 当用户想让电路在后端上运行时，他们需要一种方便的方式在上面工作。在Terra中我们使用以下四个部分完成这项工作：
      + `Provider`是实现抽象基类[`BaseProvider`](https://qiskit.org/documentation/stubs/qiskit.providers.BaseProvider.html#qiskit.providers.BaseProvider)的实体，并且提供了使用一组不同后端的访问途径（例如，通过IBM Quantum Experience可用的后端）。举例来说，它通过与那些后端交互，找到哪些后端可用或者取回某一特定后端的实例。
      + `Backend`是实现抽象基类`Backend`的实体，代表着一个模拟器或者是一个真实的量子计算机用于运行量子线路并且返回结果。他们有一个运行方法，将*qjob*作为输入，并返回一个`BaseJob`对象。这一对象使得工作异步进行，当工作完成了之后可以从后端取回结果
@@ -68,7 +68,7 @@
 
 **安装**
 
-​	可以在官网下载对应系统的包进行安装，可以参考网站[2]。
+​	可以在官网下载对应系统的包进行安装，可以参考网站[[2]](https://zhuanlan.zhihu.com/p/32925500)。
 
 #### Jupyter安装
 
@@ -108,6 +108,14 @@ pip install jupyter_contrib_nbextensions
 
 安装后需要配置nbextension，注意配置的时候要确保已经关闭Jupyter Notebook
 
+**使用**
+
+在工作目录下，启动jupyter notebook：
+
+```sh
+jupyter notebook
+```
+
 ### Qiskit 安装[4]
 
 #### 安装
@@ -116,6 +124,12 @@ pip install jupyter_contrib_nbextensions
 
 ```
 conda create -n name_of_my_env python=3.8
+```
+
+​	如果需要删除环境，可以执行以下命令：
+
+```sh
+conda remove -n name_of_my_env --all
 ```
 
 ​	激活你的环境：
@@ -225,9 +239,23 @@ jupyter notebook
 
 qiskit-terra在github上提供了[example文件夹](https://github.com/Qiskit/qiskit-terra/tree/master/examples)，包含了python和qasm的量子程序示例。见该目录下Example文件夹下的[README](./Example/README.md)文件。
 
-### 注意事项
+##  注意事项
 
-1. 如果在jupyter使用过程中出现ImportError，请查看Jupyter当前使用的Python版本是否是包所安装的对应版本。
+1. 如果在jupyter使用过程中出现ImportError，请查看Jupyter当前使用的Python版本是否是包所安装的对应版本。可以执行以下语句查看当前的Python版本：
+
+	```python
+	import sys
+	sys.executable
+	```
+
+	然后在shell里利用`which python`对比两者的可执行文件位置。这是有可能有两种情况：
+
+	+ 第一种情况，两个python并不相同。这时有可能是Anaconda环境的问题，需要进行环境的切换
+	+ 第二种情况，两个python版本相同。这时可能是pip包没有安装，你可以在jupyter notebook中执行
+
+	```python
+	!pip install <package-name>
+	```
 
 ## Qiskit API
 

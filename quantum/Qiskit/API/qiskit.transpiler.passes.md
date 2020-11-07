@@ -110,29 +110,85 @@ Level 3执行重量级优化算法。流程如下：
 	- **在测量前移除对角矩阵的量子门**（RemoveDiagonalGatesBeforeMeasure）
 	- 对于有向边的硬件，**改写CX（插入H门）满足方向性**（CXDirection）
 
+## Hoare逻辑
+
+​	这部分的思想参考论文[arXiv: 1810.00375](https://arxiv.org/pdf/1810.00375)
+
+​	这一部分并没有更新在Qiskit的官方文档上。主要由位于qiskit/transpiler/passes/optimization下的两个文件——[hoare_opt.py](https://github.com/Qiskit/qiskit-terra/blob/master/qiskit/transpiler/passes/optimization/hoare_opt.py)和[\_gate\_extension.py](https://github.com/Qiskit/qiskit-terra/blob/master/qiskit/transpiler/passes/optimization/_gate_extension.py)组成。
+
+### 扩展门类
+
+​	`_gate_extension.py`利用Hoare逻辑使用过程所需要的函数对Qiskit提供的门类进行拓展，即平凡条件函数和后条件函数。如果平凡条件的返回值为`true`，说明当前量子门是平凡的，当前量子比特处于经典态。无法被忽略的函数/门可能是不平凡的或者有着未知的后条件。
+
+​	该文件中对下面的标准门进行了拓展：
+
+```python
+if HAS_Z3:
+    # FLIP GATES #
+    # XGate
+    XGate._postconditions = lambda self, x1, y1: y1 == Not(x1)
+    CXGate._postconditions = lambda self, x1, y1: y1 == Not(x1)
+    CCXGate._postconditions = lambda self, x1, y1: y1 == Not(x1)
+
+    # YGate
+    YGate._postconditions = lambda self, x1, y1: y1 == Not(x1)
+    CYGate._postconditions = lambda self, x1, y1: y1 == Not(x1)
+
+    # PHASE GATES #
+    # IdGate
+    IGate._postconditions = lambda self, x1, y1: y1 == x1
+
+    # ZGate
+    ZGate._trivial_if = lambda self, x1: True
+    ZGate._postconditions = lambda self, x1, y1: y1 == x1
+    CZGate._trivial_if = lambda self, x1: True
+    CZGate._postconditions = lambda self, x1, y1: y1 == x1
+
+    # SGate
+    SGate._trivial_if = lambda self, x1: True
+    SGate._postconditions = lambda self, x1, y1: y1 == x1
+    SdgGate._trivial_if = lambda self, x1: True
+    SdgGate._postconditions = lambda self, x1, y1: y1 == x1
+
+    # TGate
+    TGate._trivial_if = lambda self, x1: True
+    TGate._postconditions = lambda self, x1, y1: y1 == x1
+    TdgGate._trivial_if = lambda self, x1: True
+    TdgGate._postconditions = lambda self, x1, y1: y1 == x1
+
+    # RzGate = U1Gate
+    RZGate._trivial_if = lambda self, x1: True
+    RZGate._postconditions = lambda self, x1, y1: y1 == x1
+    CRZGate._trivial_if = lambda self, x1: True
+    CRZGate._postconditions = lambda self, x1, y1: y1 == x1
+    U1Gate._trivial_if = lambda self, x1: True
+    U1Gate._postconditions = lambda self, x1, y1: y1 == x1
+    CU1Gate._trivial_if = lambda self, x1: True
+    CU1Gate._postconditions = lambda self, x1, y1: y1 == x1
+
+    # MULTI-QUBIT GATES #
+    # SwapGate
+    SwapGate._trivial_if = lambda self, x1, x2: x1 == x2
+    SwapGate._postconditions = lambda self, x1, x2, y1, y2: And(x1 == y2, x2 == y1)
+    CSwapGate._trivial_if = lambda self, x1, x2: x1 == x2
+    CSwapGate._postconditions = lambda self, x1, x2, y1, y2: And(x1 == y2, x2 == y1)
+```
+
+​	其中，`x1`和`x2`应为门执行前量子比特的状态，`y1`和`y2`应为门执行后量子比特的状态。利用后条件在两者之间建立联系。不过值得注意的是，在论文中提到的CX门的平凡条件并没有在这里体现。除此之外，实现的平凡条件也只有两类：Z门和SWAP门。其中Z门的平凡条件为始终返回真，即Z门总是平凡的。
+
+​	
+
 ## Pass列表
-
-根据[文档中对pass的分类](https://qiskit.org/documentation/apidoc/transpiler_passes.html)对pass进行列举。
-
-### Circuit Analysis
-
-[**count_ops.py**](https://github.com/Qiskit/qiskit-terra/blob/master/qiskit/transpiler/passes/analysis/count_ops.py)
-
-+ **Pass名** [CountOps](https://qiskit.org/documentation/stubs/qiskit.transpiler.passes.CountOps.html#qiskit.transpiler.passes.CountOps)
-
-+ **功能** 分析pass，计算DAG的操作数字典（按操作名分类），作为一个整数写入`property['count_ops']`当中
-+ **输入** dag线路
 
 ### Optimizations
 
-[**crosstalk_adaptive_schedule.py**](https://github.com/Qiskit/qiskit-terra/blob/master/qiskit/transpiler/passes/analysis/count_ops.py)
+#### [CrosstalkAdaptiveSchedule](https://qiskit.org/documentation/stubs/qiskit.transpiler.passes.CrosstalkAdaptiveSchedule.html#qiskit.transpiler.passes.CrosstalkAdaptiveSchedule)
 
-+ **Pass名** [CrosstalkAdaptiveSchedule](https://qiskit.org/documentation/stubs/qiskit.transpiler.passes.CrosstalkAdaptiveSchedule.html#qiskit.transpiler.passes.CrosstalkAdaptiveSchedule)
++ **文件位置** [crosstalk_adaptive_schedule.py](https://github.com/Qiskit/qiskit-terra/blob/master/qiskit/transpiler/passes/analysis/count_ops.py)
 
 + **功能** 利用适应性的指令调度减少存在的串扰
 
 + **输入参数** 
-
 	+ backend_prop([BackendProperties](https://qiskit.org/documentation/stubs/qiskit.providers.models.BackendProperties.html#qiskit.providers.models.BackendProperties))：后端属性对象
 
 	+ crosstalk_prop(dict)：串扰属性对象
@@ -150,3 +206,48 @@ Level 3执行重量级优化算法。流程如下：
 	+ measured_qubits(list)：在特定的电路上将被测量的一系列量子比特
 
 		+ 当随后的模块中插入了测量门，这个参数才有用处。
+
+#### [CommutativeCancellation](https://qiskit.org/documentation/stubs/qiskit.transpiler.passes.CommutativeCancellation.html#qiskit.transpiler.passes.CommutativeCancellation)
+
++ **代码位置** [commutative_cancellation.py](https://qiskit.org/documentation/_modules/qiskit/transpiler/passes/optimization/commutative_cancellation.html#CommutativeCancellation)
+
++ **功能** 通过对易关系消除冗余门(自伴算子，Hermitian算子)。
+
+  用于消除自逆的旋转/门。消除规则利用的是线路中存在的对易关系。考虑的门包括：
+
+  ```
+  H, X, Y, Z, CX, CY, CZ
+  ```
+
+  遍历每个量子位以生成抵消字典。抵消字典规则如下：
+
+  + 对于1-量子比特门，其键为`(gate_type, qubit_id, commutation_set_id)`，其值为共享类型，量子比特和对易门集合id的门的列表。
+  + 对于2-量子比特门，其键为`(gate_type, first_qbit, sec_qbit, first_commutation_set_id)`，其值为共享门类型，量子比特和对易门集合的门列表。
+
++ **属性**
+
+	| 函数名                                         | 函数说明                 |
+	| ---------------------------------------------- | ------------------------ |
+	| CommutativeCancellation.is_analysis_pass       | 检查当前Pass是否是分析遍 |
+	| CommutativeCancellation.is_transformation_pass | 检查当前Pass是否是转换遍 |
+
++ 方法
+
+	| 方法名                           | 功能描述                               |
+	| -------------------------------- | -------------------------------------- |
+	| CommutativeCancellation.name()   | 返回Pass的名称                         |
+	| ComutativeCacncellation.run(dag) | 在`dag`上运行CommutativeCancellation遍 |
+
++ 具体分析
+
+	​		在该Pass的优化过程中，需要调用到继承属性`property_set['commutation_set']`的内容。因为在运行该优化遍之前，需要调用`commutation_analysis`，或者使用`PassManager`类。这一过程与其说是搜索线路中存在已有的对易关系，倒不如说是根据存在的对易关系对线路进行化简。
+	
+	​		其化简思路如下：
+	
+	+  对于{cx, cy, cz, h, y}门，采取的优化方式是相邻的门进行消除
+	+ 对于`x_rotation`类门{rx, x}和`z_rotation`类门`{z,u1,rz,t,s}`则是分别通过合并进行化简
+	
+	
+
+
+

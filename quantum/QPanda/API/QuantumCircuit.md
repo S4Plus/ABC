@@ -305,6 +305,8 @@ class OriginQGate : public QNode, public AbstractQGateNode
 
 ## QProgram
 
+
+
 ## 其它接口
 
 **QCircuit createEmptyCircuit()**
