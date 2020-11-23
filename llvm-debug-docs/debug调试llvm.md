@@ -2,7 +2,7 @@
 
 ## 对调用LLVM API的目标程序进行debug调试
 
-以`fib_gen.cpp`生成斐波那契数为例，该程序调用LLVM API产生LLVM IR。
+以[fib_gen.cpp](./fib_gen.cpp)生成斐波那契数为例，该程序调用LLVM API产生LLVM IR。
 
 执行
 
@@ -24,7 +24,7 @@ gdb fib_gen
 
 ## 对IR代码用opt进行debug调试
 
-以`hello.ll`代码为例，该代码由clang编译产生。
+以[hello.ll](./hello.ll)代码为例，该代码由clang编译产生。
 
 进入gdb调试opt
 
