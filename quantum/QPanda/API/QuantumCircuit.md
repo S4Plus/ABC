@@ -1,8 +1,6 @@
-# [Core](https://qpanda-tutorial.readthedocs.io/zh/latest/api/group_Core.html)
+# QuantumCirucit
 
-## QuantumCirucit
-
-### 简介
+## 简介
 
 ​	量子线路，也称量子逻辑电路是最常用的通用量子计算模型，表示在抽象概念下，对于量子比特进行操作的线路，是各种逻辑门的集合。最后常需要量子测量将结果读取出来。
 
@@ -24,105 +22,43 @@ QCircuit cir = createEmptyCircuit();
 QCircuit << QGate;
 ```
 
-**接口总览**
+## GlobalVariable
+
+**NodeType**
 
 ```C++
-class QGATE_SPACE::AbstractAngleParameter;
-class QPanda::AbstractClassicalProg;
-class QPanda::AbstractControlFlowNode;
-class QPanda::AbstractQGateNode;
-class QPanda::AbstractQuantumCircuit;
-class QPanda::AbstractQuantumMeasure;
-class QPanda::AbstractQuantumProgram;
-class QPanda::AbstractQuantumReset;
-class QPanda::CExpr;
-class QPanda::CExprFactory;
-class QPanda::CExprFactoryHelper;
-class QPanda::ClassicalCondition;
-class QPanda::ClassicalProg;
-class QPanda::ClassicalProgFactory;
-class QPanda::ClassicalProgRegisterAction;
-class QPanda::HadamardQCircuit;
-class QPanda::Item;
-class QPanda::OriginCExpr;
-class QPanda::OriginCircuit;
-class QPanda::OriginClassicalProg;
-class QPanda::OriginItem;
-class QPanda::OriginProgram;
-class QPanda::OriginQGate;
-class QPanda::OriginQIf;
-class QPanda::OriginQWhile;
-class QPanda::OriginReset;
-class QPanda::QCircuit;
-class QPanda::QGate;
-
-template <typename ... Targs>
-class QGATE_SPACE::QGateFactory;
-
-class QPanda::QGateNodeFactory;
-class QPanda::QIfFactory;
-class QPanda::QIfProg;
-class QPanda::QIfRegisterAction;
-class QPanda::QMeasure;
-class QPanda::QNode;
-class QPanda::QNodeDeepCopy;
-class QPanda::QProg;
-class QPanda::QReset;
-class QPanda::QResetFactory;
-class QPanda::QWhileFactory;
-class QPanda::QWhileProg;
-class QPanda::QuantumCircuitFactory;
-class QGATE_SPACE::QuantumGate;
-class QPanda::QuantumMeasureFactory;
-class QPanda::QuantumProgramFactory;
-
-// global functions
-
-QIfProg QPanda::createIfProg(ClassicalCondition cc, QProg true_node);
-QIfProg QPanda::createIfProg(ClassicalCondition cc, QProg true_node, QProg false_node);
-QWhileProg QPanda::createWhileProg(ClassicalCondition cc, QProg true_node);
-QCircuit QPanda::createEmptyCircuit();
-HadamardQCircuit QPanda::createHadamardQCircuit(QVec& pQubitVector);
-QGate QPanda::I(Qubit* qubit);
-QGate QPanda::X(Qubit* qubit);
-QGate QPanda::X1(Qubit* qubit);
-QGate QPanda::RX(Qubit*, double angle);
-QGate QPanda::U1(Qubit*, double angle);
-QGate QPanda::U2(Qubit* qubit, double phi, double lambda);
-QGate QPanda::U3(Qubit* qubit, double theta, double phi, double lambda);
-QGate QPanda::Y(Qubit* qubit);
-QGate QPanda::Y1(Qubit* qubit);
-QGate QPanda::RY(Qubit*, double angle);
-QGate QPanda::Z(Qubit* qubit);
-QGate QPanda::Z1(Qubit* qubit);
-QGate QPanda::RZ(Qubit*, double angle);
-QGate QPanda::S(Qubit* qubit);
-QGate QPanda::T(Qubit*);
-QGate QPanda::H(Qubit* qubit);
-QGate QPanda::CNOT(Qubit* control_qubit, Qubit* target_qubit);
-QGate QPanda::CZ(Qubit* control_qubit, Qubit* target_qubit);
-QGate QPanda::U4(double alpha, double beta, double gamma, double delta, Qubit*);
-QGate QPanda::U4(QStat& matrix, Qubit*);
-QGate QPanda::QDouble(QStat& matrix, Qubit* qubit1, Qubit* qubit2);
-QGate QPanda::CU(double alpha, double beta, double gamma, double delta, Qubit*, Qubit*);
-QGate QPanda::CU(QStat& matrix, Qubit*, Qubit*);
-QGate QPanda::iSWAP(Qubit* targitBit_fisrt, Qubit* targitBit_second, double theta);
-QGate QPanda::CR(Qubit* control_qubit, Qubit* targit_qubit, double theta);
-QGate QPanda::SqiSWAP(Qubit* targitBit_fisrt, Qubit* targitBit_second);
-QGate QPanda::SWAP(Qubit* targitBit_fisrt, Qubit* targitBit_second);
-
-template <typename _Ty>
-_Ty QPanda::deepCopy(_Ty& node);
-
-QProg QPanda::createEmptyQProg();
-QReset QPanda::Reset(Qubit*);
+enum NodeType
+{
+  NODE_UNDEFINED = -1,/**< Undefined node */
+  GATE_NODE,/**< Quantum gate node */
+  CIRCUIT_NODE,/**< Quantum circuit node */
+  PROG_NODE,/**< Quantum program node */
+  MEASURE_GATE,/**< Quantum measure node */
+  WHILE_START_NODE,/**< Quantum while controlflow start node */
+  QIF_START_NODE,/**< Quantum if controlflow start node */
+  CLASS_COND_NODE,/**< Quantum classical condition node */
+  QWAIT_NODE,     /**< QWait node */
+	RESET_NODE      /**< QReset node */
+};
 ```
 
-接下来用文件区分对各个接口进行分类：
+**结点类型说明**
 
-### [QCircuit](https://github.com/OriginQ/QPanda-2/blob/master/Core/QuantumCircuit/QCircuit.cpp)
+| 类型名              | 结点说明                |
+| ------------------- | ----------------------- |
+| NODE_UNDEFINED = -1 | 未定义结点              |
+| GATE_NODE           | 量子门结点              |
+| CIRCUIT_NODE        | 量子线路结点            |
+| PROG_NODE           | 量子程序结点            |
+| MEASURE_NODE        | 量子测量结点            |
+| WHILE_START_NODE    | 量子while控制流开始结点 |
+| QIF_START_NODE      | 量子经典条件分支结点    |
+| QWAIT_NODE          | Qwait结点               |
+| RESET_NODE          | reset结点               |
 
-[AbstractQuantumCircuit](https://qpanda-tutorial.readthedocs.io/zh/latest/api/class_QPanda_AbstractQuantumCircuit.html#doxid-class-q-panda-1-1-abstract-quantum-circuit)
+## [QCircuit](https://github.com/OriginQ/QPanda-2/blob/master/Core/QuantumCircuit/QCircuit.cpp)
+
+[**AbstractQuantumCircuit**](https://qpanda-tutorial.readthedocs.io/zh/latest/api/class_QPanda_AbstractQuantumCircuit.html#doxid-class-q-panda-1-1-abstract-quantum-circuit)
 
 量子线路抽象基类
 
@@ -216,7 +152,7 @@ public:
 };
 ```
 
-### QNode
+## QNode
 
 [QNode](https://qpanda-tutorial.readthedocs.io/zh/latest/api/class_QPanda_QNode.html#doxid-class-q-panda-1-1-q-node)
 
@@ -271,7 +207,7 @@ public:
 
 ​	在添加了属性变量m_pNext和m_pPre之后，该类更加接近链表节点这一数据类型了。
 
-### QGate
+## QGate
 
 **[AbstractQGateNode](https://qpanda-tutorial.readthedocs.io/zh/latest/api/class_QPanda_AbstractQGateNode.html)**
 
@@ -367,9 +303,9 @@ class OriginQGate : public QNode, public AbstractQGateNode
 	+ std::vector<Qubit*> m_control_qubit_vector
 + 公共方法均为父类的虚方法的实现
 
-### QProgram
+## QProgram
 
-### 其它接口
+## 其它接口
 
 **QCircuit createEmptyCircuit()**
 
