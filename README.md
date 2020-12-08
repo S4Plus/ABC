@@ -30,6 +30,15 @@
 * [GDB使用](https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/gdb.html)
 * [可视化工具](./toolbox/visualization.md)
 * [GDB调试LLVM](./llvm-debug-docs/debug调试llvm.md)
+* 符号代数求解：[redlog](https://www.redlog.eu/)
+
+
+### 自动驾驶模拟器
+
+* [Carla](http://carla.org/)
+* [OpenDS](https://opends.dfki.de/)
+* [LGSVL](https://www.lgsvlsimulator.com/)
+
 
 ## 会议和期刊
 
