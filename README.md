@@ -39,6 +39,9 @@
 * [OpenDS](https://opends.dfki.de/)
 * [LGSVL](https://www.lgsvlsimulator.com/)
 
+## 前端
+
+* 前端框架：[Vue](./frontend/Vue/Vue.md)
 
 ## 会议和期刊
 
