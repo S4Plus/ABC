@@ -26,11 +26,12 @@
 ## 工具
 
 * [rst 转 pdf](./toolbox/rst2pdf.md)
-* [校园网代理设置](./toolbox/proxy.md)
+* [校园网代理设置(已过期)](./toolbox/proxy.md)
 * [GDB使用](https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/gdb.html)
 * [可视化工具](./toolbox/visualization.md)
 * [GDB调试LLVM](./llvm-debug-docs/debug调试llvm.md)
 * 符号代数求解：[redlog](https://www.redlog.eu/)
+* 内网穿透：[frp](https://gofrp.org/)
 
 
 ### 自动驾驶模拟器
