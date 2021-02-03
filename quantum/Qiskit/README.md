@@ -182,37 +182,7 @@ from qiskit import IBMQ
 IBMQ.save_account(`MY_API_TOKEN`)
 ```
 
-### Q&A
 
-**问题一**
-
-Q: 无法创建新环境。执行`conda create -n qiskit python=3.8`后终端输出
-
-```sh
-Collecting package metadata (repodata.json): done
-Solving environment: done
-```
-
-然后直接退出，但是`conda env list`中没有qiskit。
-
-A: 解决办法：利用`conda clean --all`清理安装包，之后再重新创建新环境。
-
-**问题二**
-
-Q: conda删除虚拟环境出错。在用conda建立虚拟环境后，未指定python版本
-
-```sh
-conda create -n env_name
-conda remove -n env_name --all
-```
-
-出现：PackagesNotFoundError: The following packages are missing from the target environment:
-
-A: 采用以下命令即可
-
-```sh
-conda env remove -n env_name
-```
 
 ## Qiskit 使用
 
@@ -256,6 +226,36 @@ qiskit-terra在github上提供了[example文件夹](https://github.com/Qiskit/qi
 	```python
 	!pip install <package-name>
 	```
+
+**问题一**
+
+Q: 无法创建新环境。执行`conda create -n qiskit python=3.8`后终端输出
+
+```sh
+Collecting package metadata (repodata.json): done
+Solving environment: done
+```
+
+然后直接退出，但是`conda env list`中没有qiskit。
+
+A: 解决办法：利用`conda clean --all`清理安装包，之后再重新创建新环境。
+
+**问题二**
+
+Q: conda删除虚拟环境出错。在用conda建立虚拟环境后，未指定python版本
+
+```sh
+conda create -n env_name
+conda remove -n env_name --all
+```
+
+出现：PackagesNotFoundError: The following packages are missing from the target environment:
+
+A: 采用以下命令即可
+
+```sh
+conda env remove -n env_name
+```
 
 ## Qiskit API
 

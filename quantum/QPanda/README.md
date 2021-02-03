@@ -55,9 +55,10 @@ mkdir -p build
 cd build 
 cmake -DCMKAE_INSTALLL_PREFIX=/usr/local -DFIND_CUDA=OFF -DUSE_CHEMIQ=OFF -DUSE_PYQPANDA=OFF ..
 make
+sudo make install
 ```
 
-这里将安装目录设置在了`/usr/local`下。
+这里将头文件文件夹`include`和库文件夹`lib`放在了`/usr/local`下。
 
 ### 使用
 
