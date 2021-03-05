@@ -44,9 +44,9 @@
 
 * 前端框架：[Vue](./frontend/Vue/Vue.md)
 
-## 软件安装
+## 软件编译安装
 
-- [TensorFlow 安装](./install/tensorflow.md)
+- [TensorFlow 从源码编译](./install/tensorflow.md)
 
 ## 会议和期刊
 
