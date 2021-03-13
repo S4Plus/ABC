@@ -12,12 +12,12 @@
   - [依赖安装](#依赖安装)
   - [初始化`rosdep`](#初始化rosdep)
 - [添加Python3支持](#添加python3支持)
-  - [安装Python3.8](#安装python38)
+  - [安装Python3.9](#安装python39)
   - [安装`pip`](#安装pip)
   - [使用`venv`（可选）](#使用venv可选)
   - [换源](#换源)
   - [安装ROS的Python3支持](#安装ros的python3支持)
-- [Graphviz相关](#graphviz相关)
+- [Graphviz相关（暂时用不上）](#graphviz相关暂时用不上)
 - [编程环境配置](#编程环境配置)
   - [PyCharm](#pycharm)
     - [版本](#版本)
@@ -70,54 +70,60 @@ rosdep update
 
 **注意**：这一步会从GitHub下载文件，可能需要翻墙，设置代理方法：
 1. 设置`http_proxy`和`https_proxy`环境变量，例如：`export http_proxy=127.0.0.1:1080;export https_proxy=$http_proxy`；
-2. 也可以用`proxychains`。设置好`/etc/proxychains.conf`。
+2. 也可以用`proxychains`。设置好`/etc/proxychains.conf`，在最下面修改代理设置，比如`socks5 127.0.0.1 7891`，然后使用`sudo proxychains rosdep init`和`proxychains rosdep update`。
 
 ## 添加Python3支持
 
-### 安装Python3.8
+### 安装Python3.9
 
-Ubuntu 16.04 LTS带的Python版本是上古的Python 3.5，我们安装新的Python 3.8。
+Ubuntu 16.04 LTS带的Python版本是上古的Python 3.5，我们安装新的Python 3.9。
 
 ```bash
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
-sudo apt -y install python3.8 python3.8-venv python3.8-dev
+sudo apt -y install python3.9 python3.9-venv python3.9-dev
 ```
 
 ### 安装`pip`
 
 ```bash
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python3.8 get-pip.py
+python3.9 get-pip.py
 ```
 
 ### 使用`venv`（可选）
 
 ```bash
-python3.8 -m venv venv
+python3.9 -m venv venv
 source venv/bin/activate
 ```
 
 ### 换源
 
 ```bash
-python3.8 -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+python3.9 -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ### 安装ROS的Python3支持
 
 ```bash
-python3.8 -m pip install rospkg netifaces defusedxml
+python3.9 -m pip install rospkg netifaces defusedxml
 ```
 
-## Graphviz相关
+## Graphviz相关（暂时用不上）
 
 ```bash
 sudo apt -y install graphviz graphviz-dev
-python3.8 -m pip install graphviz
+python3.9 -m pip install graphviz
 ```
 
 ## 编程环境配置
+
+### VSCode
+
+#### 插件
+
+VSCode现在有非常好用的插件：Pylance，推荐安装。
 
 ### PyCharm
 

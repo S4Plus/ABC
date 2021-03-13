@@ -38,13 +38,16 @@ rosdep update
 ```
 
 #### 下载与编译源码
-    分别建立三个工作空间rocon，kobuki，turtlebot，下载和编译源码
+
+分别建立三个工作空间rocon，kobuki，turtlebot，下载和编译源码。
+
+**注意** 安装过程会从GitHub下载，建议使用`proxychains`设置代理。
 
 * [rocon](http://wiki.ros.org/rocon)
     ```bash
     mkdir ~/rocon
     cd ~/rocon
-    wstool init -j5 src https://raw.github.com/robotics-in-concert/rocon/release/kinetic/rocon.rosinstall
+    wstool init -j`proc` src https://raw.github.com/robotics-in-concert/rocon/release/kinetic/rocon.rosinstall
     source /opt/ros/kinetic/setup.bash
     rosdep install --from-paths src -i -y
     catkin_make
@@ -54,7 +57,7 @@ rosdep update
     ```bash
     mkdir ~/kobuki
     cd ~/kobuki
-    wstool init -j5 src https://raw.githubusercontent.com/yujinrobot/yujin_tools/kinetic-devel/rosinstalls/kinetic/kobuki.rosinstall
+    wstool init -j`proc` src https://raw.githubusercontent.com/yujinrobot/yujin_tools/kinetic-devel/rosinstalls/kinetic/kobuki.rosinstall
     source ~/rocon/devel/setup.bash
     rosdep install --from-paths src -i -y
     catkin_make
@@ -64,7 +67,7 @@ rosdep update
     ```bash
     mkdir ~/turtlebot
     cd ~/turtlebot
-    wstool init -j5 src https://raw.github.com/yujinrobot/yujin_tools/kinetic-devel/rosinstalls/kinetic/turtlebot.rosinstall
+    wstool init -j`proc` src https://raw.github.com/yujinrobot/yujin_tools/kinetic-devel/rosinstalls/kinetic/turtlebot.rosinstall
     source ~/kobuki/devel/setup.bash
     rosdep install --from-paths src -i -y
     catkin_make

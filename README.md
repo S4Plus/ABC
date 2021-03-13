@@ -8,8 +8,7 @@
 
 ## ROS 平台相关
 
-* [ROS 安装](./ROS/ROS.md)
-* [Turtlebot 安装](./ROS/Turtlebot.md)
+[传送门](./ROS/README.md)
 
 ## WebAssembly (wasm)
 
