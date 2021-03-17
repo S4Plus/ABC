@@ -70,6 +70,7 @@ bazel version: bazel-0.26.1-installer-linux-x86_64.sh
 编译
 
 - `bazel build //tensorflow/tools/pip_package:build_pip_package`
+- debug信息编译时加上`-c dbg`
 
 #### 安装 TensorFlow
 
