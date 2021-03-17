@@ -1,5 +1,7 @@
 ### 从源代码编译
 
+参考[Build from source](https://www.tensorflow.org/install/source)和[How to build TensorFlow 2.0 on Ubuntu 18.04 (x86_64) with Bazelisk](https://gist.github.com/philwo/f3a8144e46168f23e40f291ffe92e63c)
+
 #### 下载 TensorFlow
 
 ```
@@ -68,3 +70,11 @@ bazel version: bazel-0.26.1-installer-linux-x86_64.sh
 编译
 
 - `bazel build //tensorflow/tools/pip_package:build_pip_package`
+
+#### 安装 TensorFlow
+
+```
+./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+pip install /tmp/tensorflow_pkg/tensorflow-version-tags.whl
+```
+```
