@@ -77,4 +77,3 @@ bazel version: bazel-0.26.1-installer-linux-x86_64.sh
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 pip install /tmp/tensorflow_pkg/tensorflow-version-tags.whl
 ```
-```
