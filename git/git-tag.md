@@ -23,5 +23,5 @@ git describe --tags
 查询 tag 对应的 release time ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))：
 
 ```bash
-git log -1 --format=%aI tag
+git log -1 --format=%aI --tags
 ```
