@@ -5,12 +5,21 @@ With computer system architecture entering a period of prosperity in which CPUs,
 ## Intel oneAPI
 
 - [DevCloud]( https://devcloud.intel.com/oneapi/), [github](https://github.com/oneapi-src), [Forum](https://software.intel.com/en-us/forums/intel-oneapi-forums)
+- [How to install the Intel oneAPI base toolkit](./安装oneAPI Base Toolkit本地环境.md)
 
 ## Language Specifications
 
 - [SYCL](https://www.khronos.org/sycl/): [sycl-2020.html](https://www.khronos.org/registry/SYCL/specs/sycl-2020/html/sycl-2020.html)
 
-## Samples
+## DevCloud
+
++ [How to use the Intel DevCloud](./DevCloud/DevCloud for OneAPI使用.md)
+
+## DPC++
+
++ The book to introduce the Data Parallel C++ : [Data Parallel C++](https://www.apress.com/jp/book/9781484255735)
+
+### Samples
 
 - [Data Parallel C++ Book Source Samples](https://github.com/Apress/data-parallel-CPP)
 - [Intel oneAPI Toolkit Samples](https://github.com/oneapi-src/oneAPI-samples)
