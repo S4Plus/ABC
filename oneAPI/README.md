@@ -13,3 +13,5 @@ With computer system architecture entering a period of prosperity in which CPUs,
 ## Samples
 
 - [Data Parallel C++ Book Source Samples](https://github.com/Apress/data-parallel-CPP)
+- [Intel oneAPI Toolkit Samples](https://github.com/oneapi-src/oneAPI-samples)
+
