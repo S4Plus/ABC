@@ -5,7 +5,7 @@ With computer system architecture entering a period of prosperity in which CPUs,
 ## Intel oneAPI
 
 - [DevCloud]( https://devcloud.intel.com/oneapi/), [github](https://github.com/oneapi-src), [Forum](https://software.intel.com/en-us/forums/intel-oneapi-forums)
-- [How to install the Intel oneAPI base toolkit](./安装oneAPI Base Toolkit本地环境.md)
+- [How to install the Intel oneAPI base toolkit](./安装oneAPIBaseToolkit本地环境.md)
 
 ## Language Specifications
 
@@ -13,7 +13,7 @@ With computer system architecture entering a period of prosperity in which CPUs,
 
 ## DevCloud
 
-+ [How to use the Intel DevCloud](./DevCloud/DevCloud for OneAPI使用.md)
++ [How to use the Intel DevCloud](./DevCloud/DevCloudforOneAPI使用.md)
 
 ## DPC++
 
