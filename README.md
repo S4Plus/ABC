@@ -6,6 +6,8 @@
 * [Ubuntu](./OS/ubuntu.md)
 * [搭建NextCloud](./OS/搭建nextcloud.md)
 
+## [oneAPI](oneAPI/)
+
 ## ROS 平台相关
 
 [传送门](./ROS/README.md)
