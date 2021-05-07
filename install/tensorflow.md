@@ -72,6 +72,30 @@ bazel version: bazel-0.26.1-installer-linux-x86_64.sh
 - `bazel build //tensorflow/tools/pip_package:build_pip_package`
 - debug信息编译时加上`-c dbg`
 
+#### 编译错误
+
+- 如果是`"external/grpc/src/core/lib/gpr/log_linux.cc:43:13: error: ambiguating new declaration of 'long int gettid()'"`，参考[Issue](https://github.com/clearlinux/distribution/issues/1151)，进行如下操作：
+```
+cd third_party
+wget https://nomeroff.net.ua/tf/Rename-gettid-functions.patch
+cd ..
+vim tensorflow/workspace.bzl
+# 找到tf_http_archive( name = "grpc",...
+# 添加下面的patch_file一行
+    tf_http_archive(
+        name = "grpc",
+        patch_file = clean_dep("//third_party:Rename-gettid-functions.patch"),
+        sha256 = "67a6c26db56f345f7cee846e681db2c23f919eba46dd639b09462d1b6203d28c",
+        strip_prefix = "grpc-4566c2a29ebec0835643b972eb99f4306c4234a3",
+        system_build_file = clean_dep("//third_party/systemlibs:grpc.BUILD"),
+        urls = [
+            "https://storage.googleapis.com/mirror.tensorflow.org/github.com/grpc/grpc/archive/4566c2a29ebec0835643b972eb99f4306c4234a3.tar.gz",
+            "https://github.com/grpc/grpc/archive/4566c2a29ebec0835643b972eb99f4306c4234a3.tar.gz",
+        ],
+    )
+# 重新运行bazel
+```
+
 #### 安装 TensorFlow
 
 ```
