@@ -15,14 +15,20 @@
 
 ## 安装新版本的Python3
 
-### 添加软件源
+**无论如何都不要卸载发行版自带的Python！** 系统很多组件依赖系统自带的python。（不过卸载了也不要紧，照着apt log装回来，还有救）
+
+主要有两种方案：添加PPA；使用pyenv。两种方式各有优劣：PPA源在系统层面添加，直接下载二进制包，不用编译；而pyenv默认是安装到用户目录下，而且需要设置环境变量，需要编译。但是pyenv支持anaconda、pypy等。
+
+### DeadSnakes PPA
+
+#### 添加软件源
 
 ```bash
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
 ```
 
-### 安装
+#### 安装
 
 ```bash
 sudo apt -y install python3.8
@@ -37,6 +43,17 @@ python3.8 -m pip install xxxx
 python3.8 -m venv venv
 ```
 
+要注意不要破坏系统的包，尽量`python3.x -m pip install --user`，或者直接在virtualenv里面安装。
+
+### pyenv
+
+在Linux下，通过[pyenv-installer](https://github.com/pyenv/pyenv-installer)安装：
+
+```bash
+curl https://pyenv.run | bash
+```
+
+要注意，可能需要参照[GitHub上的说明](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv)来设置环境变量。
 
 ## 双系统相关
 
