@@ -1,4 +1,4 @@
-# OBS(Open Broadcaster Software)
+# [OBS(Open Broadcaster Software)](https://obsproject.com)
 
 免费且开源的视频录制和直播流工具。支持macOS(Apple Silicon和Intel均可), Windows, Linux。
 
